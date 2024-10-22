@@ -8,8 +8,6 @@
 #include "MessagingSystem.h"
 #include "UI.h"
 
-
-
 class GameManager {
 public:
     GameManager(sf::RenderWindow* window);
