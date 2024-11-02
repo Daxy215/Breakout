@@ -67,9 +67,8 @@ void PowerupManager::spawnPowerup()
     // to a random ball
     Ball* ball = _balls[rand() % _balls.size()];
     
-    _powerups.push_back(new PowerupNewBall(_window, _paddle, _gameManager, ball, _balls));
     // TODO finish this.
-    /*switch (rand() % 6)
+    switch (rand() % 6)
     {
     case 0:
         _powerups.push_back(new PowerupBigPaddle(_window, _paddle, ball));
@@ -87,9 +86,9 @@ void PowerupManager::spawnPowerup()
         _powerups.push_back(new PowerupFireBall(_window, _paddle, ball));
         break;
     case 5:
-        _powerups.push_back(new PowerupNewBall(_window, _paddle, _gameManager, _balls));
+        _powerups.push_back(new PowerupNewBall(_window, _paddle, _gameManager, ball, _balls));
        break;
-    }*/
+    }
 }
 
 void PowerupManager::checkCollision()
