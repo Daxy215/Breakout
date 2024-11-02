@@ -1,8 +1,15 @@
 #include "PowerupManager.h"
 
+#include "PowerupBigPaddle.h"
+#include "PowerupFastBall.h"
+#include "PowerupFireBall.h"
+#include "PowerupNewBall.h"
+#include "PowerupSlowBall.h"
+#include "PowerupSmallPaddle.h"
 
-PowerupManager::PowerupManager(sf::RenderWindow* window, Paddle* paddle, Ball* ball)
-    : _window(window), _paddle(paddle), _ball(ball)
+
+PowerupManager::PowerupManager(sf::RenderWindow* window, Paddle* paddle, GameManager* gameManager, std::vector<Ball*>& balls)
+    : _window(window), _paddle(paddle), _gameManager(gameManager), _balls(balls)
 {
 }
 
@@ -56,29 +63,33 @@ void PowerupManager::render()
 
 void PowerupManager::spawnPowerup()
 {
-
+    // Apply the power up,
+    // to a random ball
+    Ball* ball = _balls[rand() % _balls.size()];
+    
+    _powerups.push_back(new PowerupNewBall(_window, _paddle, _gameManager, ball, _balls));
     // TODO finish this.
-    switch (rand() % 5)
+    /*switch (rand() % 6)
     {
     case 0:
-        _powerups.push_back(new PowerupBigPaddle(_window, _paddle, _ball));
+        _powerups.push_back(new PowerupBigPaddle(_window, _paddle, ball));
         break;
     case 1:
-        _powerups.push_back(new PowerupSlowBall(_window, _paddle, _ball));
+        _powerups.push_back(new PowerupSlowBall(_window, _paddle, ball));
         break;
     case 2:
-        _powerups.push_back(new PowerupFastBall(_window, _paddle, _ball));
+        _powerups.push_back(new PowerupFastBall(_window, _paddle, ball));
         break;
     case 3:
-        _powerups.push_back(new PowerupSmallPaddle(_window, _paddle, _ball));
+        _powerups.push_back(new PowerupSmallPaddle(_window, _paddle, ball));
         break;
     case 4:
-        _powerups.push_back(new PowerupFireBall(_window, _paddle, _ball));
+        _powerups.push_back(new PowerupFireBall(_window, _paddle, ball));
         break;
     case 5:
+        _powerups.push_back(new PowerupNewBall(_window, _paddle, _gameManager, _balls));
        break;
-    }
-
+    }*/
 }
 
 void PowerupManager::checkCollision()

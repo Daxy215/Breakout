@@ -4,19 +4,17 @@
 #include <vector>
 #include <optional>
 #include "PowerupBase.h"
-#include "PowerupBigPaddle.h"
-#include "PowerupSmallPaddle.h"
-#include "PowerupSlowBall.h"
-#include "PowerupFastBall.h"
-#include "PowerupFireBall.h"
-#include "Paddle.h"
-#include "Ball.h"
+#include "../Paddle.h"
+#include "../Ball.h"
 
+// Forward declaration,
+// to avoid circular dependence
+class GameManager;
 
 class PowerupManager
 {
 public:
-    PowerupManager(sf::RenderWindow* window, Paddle* paddle, Ball* ball);
+    PowerupManager(sf::RenderWindow* window, Paddle* paddle, GameManager* gameManager, std::vector<Ball*>& balls);
     ~PowerupManager();
 
     void update(float dt);
@@ -29,7 +27,12 @@ public:
 private:
     sf::RenderWindow* _window;
     Paddle* _paddle;
-    Ball* _ball;
+
+    GameManager* _gameManager;
+    
+    // This is referenced from,
+    // the GameManager clas
+    std::vector<Ball*>& _balls;
     std::vector<PowerupBase*> _powerups;            // used to manage deletion.
     std::optional<std::pair<POWERUPS, float>> _powerupInEffect;    // used for gameManager to get reference.
 };

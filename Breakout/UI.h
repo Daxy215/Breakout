@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "CONSTANTS.h"
-#include "PowerupManager.h"
+#include "Powerups/PowerupManager.h"
 
 class GameManager;
 

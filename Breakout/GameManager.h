@@ -4,7 +4,7 @@
 #include "Paddle.h"
 #include "Ball.h"
 #include "BrickManager.h"
-#include "PowerupManager.h"
+#include "Powerups/PowerupManager.h"
 #include "MessagingSystem.h"
 #include "UI.h"
 
@@ -39,7 +39,7 @@ private:
 
     sf::RenderWindow* _window;
     Paddle* _paddle;
-    Ball* _ball;
+    std::vector<Ball*> _balls;
     BrickManager* _brickManager;
     PowerupManager* _powerupManager;
     MessagingSystem* _messagingSystem;

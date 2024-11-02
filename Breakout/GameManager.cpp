@@ -1,10 +1,10 @@
 #include "GameManager.h"
 #include "Ball.h"
-#include "PowerupManager.h"
+#include "Powerups/PowerupManager.h"
 #include <iostream>
 
 GameManager::GameManager(sf::RenderWindow* window)
-    : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
+    : _window(window), _paddle(nullptr), _balls(1), _brickManager(nullptr), _powerupManager(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), _lives(3), _pauseHold(0.f), _levelComplete(false),
     _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f)
 {
@@ -20,10 +20,13 @@ void GameManager::initialize()
     _paddle = new Paddle(_window);
     _brickManager = new BrickManager(_window, this);
     _messagingSystem = new MessagingSystem(_window);
-    _ball = new Ball(_window, 400.0f, this); 
-    _powerupManager = new PowerupManager(_window, _paddle, _ball);
+    
+    // By default there is,
+    // only a single ball
+    _balls[0] = new Ball(_window, 400.0f, this); 
+    _powerupManager = new PowerupManager(_window, _paddle, this, _balls);
     _ui = new UI(_window, _lives, this);
-
+    
     // Create bricks
     _brickManager->createBricks(5, 10, 80.0f, 30.0f, 5.0f);
 }
@@ -66,17 +69,16 @@ void GameManager::update(float dt)
     {
         return;
     }
-
+    
     // timer.
     _time += dt;
-
-
+    
     if (_time > _timeLastPowerupSpawned + POWERUP_FREQUENCY && rand()%700 == 0)      // TODO parameterise
     {
         _powerupManager->spawnPowerup();
         _timeLastPowerupSpawned = _time;
     }
-
+    
     // move paddle
     /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) _paddle->moveRight(dt);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) _paddle->moveLeft(dt);*/
@@ -90,7 +92,11 @@ void GameManager::update(float dt)
     
     // update everything 
     _paddle->update(dt);
-    _ball->update(dt);
+    
+    // Update every ball in the scene
+    for(auto ball : _balls)
+        ball->update(dt);
+    
     _powerupManager->update(dt);
 }
 
@@ -105,7 +111,11 @@ void GameManager::loseLife()
 void GameManager::render()
 {
     _paddle->render();
-    _ball->render();
+
+    // Render every ball in the scene
+    for(auto ball : _balls)
+        ball->render();
+    
     _brickManager->render();
     _powerupManager->render();
     _window->draw(_masterText);
